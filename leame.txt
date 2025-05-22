@@ -1,0 +1,203 @@
+1. Creacion de proyecto 🤑
+
+nest new nombre_proyecto
+
+2. Instalacion librerias 👨‍💻
+
+npm i @nestjs/config
+npm i typeorm
+npm i typeorm-naming-strategies
+npm i mysql 
+npm i jsonwebtoken
+npm i bcrypt
+
+npm i pg (postgress)
+npm i express (sang momento)
+2.1 Librerias de entorno de desarrollo
+
+npm i @types/bcryptjs --save-dev
+npm i @types/jsonwebtoken --save-dev
+npm i @types/express --save-dev
+
+
+3. Creacion de las variables de entorno .env 👻
+
+SERVER_PORT=3999
+HOST = "localhost"
+DB = "bd_autenticacion"
+USER_DB = "user_node"
+PASSWORD = "123456"
+PORT = 3306
+
+4. Configuracion de variables de entorno en app module
+
+@Module({
+  imports: [ConfigModule.forRoot({envFilePath:'.env', isGlobal: true})],
+  controllers: [AppController],
+  providers: [AppService],
+})
+
+5. Configurar el puerto del servidor en el archivo main.ts
+
+  const app = await NestFactory.create(AppModule);
+  const port = Number(process.env.SERVER_PORT) || 3000;
+  await app.listen(port);
+  console.log(`Server is running on http://${process.env.HOST}:${port}`);
+
+6. Creacion de modulo conexion
+
+nest g module config/conexion
+
+6.1 Contenido del modulo de conexion.module.ts
+
+import { Global, Module } from '@nestjs/common';
+import { DataSource } from 'typeorm';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+
+@Global()
+@Module({
+  imports: [],
+  exports: [DataSource],
+  providers: [{
+    provide: DataSource,
+    useFactory: async() => {
+        try{
+        const poolConexion = new DataSource({
+            type: 'mysql',
+            host: process.env.HOST,
+            port: Number(process.env.PORT),
+            username: process.env.USER_DB,
+            password: process.env.PASSWORD,
+            database: process.env.DB,
+            logging: true,
+            synchronize: true,
+            namingStrategy: new SnakeNamingStrategy(),
+          
+        });
+        await poolConexion.initialize()
+        .then(() => {
+            console.log('Conectado a la base de datos');
+        })
+        return poolConexion;
+        
+        } catch (error) {
+            console.error('Fallo en la conexion de la base de datos', error);
+            throw error;
+        }
+    },
+  }],
+})
+export class ConexionModule {}
+
+
+6.2 cREACION ENTIDAD DE USUARIO
+
+nest g class modules/user --no-spec
+nest g class modules/role --no-spec
+nest g class modules/student --no-spec
+nest g class modules/faculty --no-spec
+nest g class modules/candidates --no-spec
+nest g class modules/elections --no-spec
+nest g class modules/votes --no-spec
+
+
+6.3 Contenido de la entidad de usuario
+
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Role } from "../role/role";
+
+@Entity('users',{schema:"public", name:"users"})
+export class User {
+    @PrimaryGeneratedColumn({type:"integer", name:"id"})
+    public id: number;
+
+    @Column({type:"varchar", name:"name", nullable:false, length: 255})
+    public name: string;
+    
+    @Column({type:"varchar", name:"document", nullable:false, length: 255})
+    public document: string;
+
+    @Column({type:"varchar", name:"email", nullable:false, length: 500})
+    public email: string;
+
+    @Column({type:"varchar", name:"password", nullable:false, length: 500})
+    public password: string;
+
+    @Column({type:"integer", name:"id_role", nullable:false})
+    public id_role: number;
+
+    @ManyToOne(() => Role, (role) => role.usersRole, {onDelete: 'RESTRICT', onUpdate: 'CASCADE'})
+    @JoinColumn({name: 'id_role', referencedColumnName: 'id'})
+    public roleUser: Role;
+
+    constructor(id: number, name: string, document: string, email: string, password: string, id_role: number) {
+        this.id = id;
+        this.name = name;
+        this.document = document;
+        this.email = email;
+        this.password = password;
+        this.id_role = id_role;
+    }
+
+}
+
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "../user/user";
+
+@Entity('roles',{schema:"public"})
+export class Role {
+
+    @PrimaryGeneratedColumn({type:"integer", name:"id"})
+    public id: number;
+
+    @Column({type:"varchar", name:"name", nullable:false, length: 200})
+    public name: string;
+
+    @OneToMany(() => User, (user) => user.roleUser)
+    public usersRole?:User[];
+
+    constructor(id: number, name: string) {
+        this.id = id;
+        this.name = name;
+    }
+}
+
+6.4 Crear Conexion
+
+7.Creacion de modulo publico
+
+
+nest g module modules/public
+
+8. Crear modulo bd_autenticacion
+
+nest g module modules/public/authentication
+nest g service modules/public/authentication --no-spec
+nest g controller modules/public/authentication --no-spec
+
+
+nest g service modules/users --no-spec
+nest g controller modules/users --no-spec
+
+9. Utilidad generacion
+
+nest g class utilities/funciones/generarToken
+
+10. Clases privadas
+
+nest g co modules/private/candidates --no-spec
+nest g s modules/private/candidates --no-spec
+nest g mo modules/private/candidates --no-spec
+nest g co modules/private/elections --no-spec
+nest g s modules/private/elections --no-spec
+nest g mo modules/private/elections --no-spec
+nest g co modules/private/faculty --no-spec
+nest g s modules/private/faculty --no-spec
+nest g mo modules/private/faculty --no-spec
+nest g co modules/private/student --no-spec
+nest g s modules/private/student --no-spec
+nest g mo modules/private/student --no-spec
+nest g co modules/private/votes --no-spec
+nest g s modules/private/votes --no-spec
+nest g mo modules/private/votes --no-spec
+
