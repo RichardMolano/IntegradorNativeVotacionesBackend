@@ -17,5 +17,5 @@ export class Role {
         this.id = id;
         this.name = name;
     }
-    
+
 }

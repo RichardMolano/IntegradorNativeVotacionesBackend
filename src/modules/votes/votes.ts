@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Candidates } from "../candidates/candidates";
-import { User } from "../user/user";
 import { Elections } from "../elections/elections";
+import { Student } from "../student/student";
 
 @Entity('votes', { schema: "public" })
 export class Votes {
@@ -28,9 +28,9 @@ export class Votes {
     @JoinColumn({ name: 'id_candidate', referencedColumnName: 'id' })
     public candidatesVotes: Candidates[];
 
-    @OneToOne(() => User, (user) => user.votesUser)
-    @JoinColumn({ name: 'id_user', referencedColumnName: 'id' })
-    public userVotes: User;
+    @OneToOne(() => Student, (student) => student.votesUser)
+    @JoinColumn({ name: 'id_user', referencedColumnName: 'id_user' })
+    public userVotes: Student;
 
     @OneToOne(() => Elections, (elections) => elections.votesElections)
     @JoinColumn({ name: 'id_election', referencedColumnName: 'id' })

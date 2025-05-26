@@ -11,7 +11,7 @@ export class User {
 
     @Column({type:"varchar", name:"name", nullable:false, length: 255})
     public name: string;
-    
+
     @Column({type:"varchar", name:"document", nullable:false, length: 255})
     public document: string;
 
@@ -30,12 +30,6 @@ export class User {
 
     @OneToOne(() => Student, (student) => student.userStudent)
     public studentUser: Student;
-
-    @OneToOne(() => Candidates, (candidates) => candidates.userStudent)
-    public candidatesUser: Candidates;
-
-    @OneToOne(() => Votes, (votes) => votes.userVotes)
-    public votesUser: Votes;
 
 
     constructor(id: number, name: string, document: string, email: string, password: string, id_role: number) {

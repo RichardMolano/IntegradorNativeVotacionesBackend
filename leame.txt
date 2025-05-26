@@ -200,4 +200,6 @@ nest g mo modules/private/student --no-spec
 nest g co modules/private/votes --no-spec
 nest g s modules/private/votes --no-spec
 nest g mo modules/private/votes --no-spec
-
+nest g co modules/private/user 
+nest g s modules/private/user 
+nest g mo modules/private/user 

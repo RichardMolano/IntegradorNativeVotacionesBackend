@@ -2,6 +2,8 @@ import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn, PrimaryGeneratedCo
 import { User } from "../user/user";
 
 import { Faculty } from "../faculty/faculty";
+import { Candidates } from "../candidates/candidates";
+import { Votes } from "../votes/votes";
 
 @Entity('students', { schema: "public" })
 export class Student {
@@ -23,6 +25,12 @@ export class Student {
     @JoinColumn({ name: 'id_faculty', referencedColumnName: 'id' })
     public facultyStudent: Faculty;
 
+    @OneToOne(() => Candidates, (candidates) => candidates.userStudent)
+    public candidatesUser: Candidates;
+
+    @OneToOne(() => Votes, (votes) => votes.userVotes)
+    public votesUser: Votes;
+    
     constructor(id_user: number, id_faculty: number, semester: number) {
         this.id_user = id_user;
         this.id_faculty = id_faculty;

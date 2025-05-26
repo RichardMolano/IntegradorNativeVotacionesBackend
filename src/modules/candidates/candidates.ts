@@ -23,9 +23,9 @@ export class Candidates {
     @JoinColumn({ name: 'id_election', referencedColumnName: 'id' })
     public electionsCandidates: Elections[];
 
-    @OneToOne(() => User, (user) => user.candidatesUser)
-    @JoinColumn({ name: 'id_user', referencedColumnName: 'id' })
-    public userStudent: User;
+    @OneToOne(() => Student, (student) => student.candidatesUser)
+    @JoinColumn({ name: 'id_user', referencedColumnName: 'id_user' })
+    public userStudent: Student;
 
     @OneToMany(() => Votes, (votes) => votes.candidatesVotes)
     public votesCandidates: Votes[];

@@ -11,6 +11,9 @@ export class Elections {
     @Column({ type: "varchar", name: "name", nullable: false, length: 255 })
     public name: string;
 
+    @Column({ type: "varchar", name: "codeJoin", nullable: true, unique: true })
+    public codeJoin: string;
+
     @Column({ type: "date", name: "start_date", nullable: false })
     public start_date: Date;
 

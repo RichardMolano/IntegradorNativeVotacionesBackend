@@ -27,6 +27,7 @@
     "@nestjs/typeorm": "^11.0.0",
     "@supabase/supabase-js": "^2.49.8",
     "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "dotenv": "^16.5.0",
     "jsonwebtoken": "^9.0.2",
     "mysql": "^2.18.1",
