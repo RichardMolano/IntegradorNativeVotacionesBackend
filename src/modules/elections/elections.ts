@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Candidates } from "../candidates/candidates";
 import { Votes } from "../votes/votes";
 
@@ -23,9 +23,9 @@ export class Elections {
     @Column({ type: "boolean", name: "state", nullable: false, default: () => "false" })
     public state: boolean;
 
-    @ManyToOne(() => Candidates, (candidates) => candidates.electionsCandidates)
+    @OneToMany(() => Candidates, (candidates) => candidates.electionsCandidates)
     public candidatesElections: Candidates[];
 
-    @OneToOne(() => Votes, (votes) => votes.electionsVotes)
-    public votesElections: Votes;
+    @OneToMany(() => Votes, (votes) => votes.electionsVotes)
+    public votesElections: Votes[]; 
 }

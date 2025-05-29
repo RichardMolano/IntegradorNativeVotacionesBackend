@@ -13,7 +13,17 @@ export class ElectionsController {
         public getElections(): any {
             return this.electionsService.getElections();
         }
-    
+
+        @Get('forVotant/:id_user')
+        public async getElectionsForVotant(@Param('id_user') id_user: number): Promise<any> {
+            return this.electionsService.getElectionsForVotant(id_user);
+        }
+
+        @Get('forCandidate/:id_user')
+        public async getElectionsForCandidate(@Param('id_user') id_user: number): Promise<any> {
+            return this.electionsService.getElectionsForCandidate(id_user);
+        }
+
         @Get('findOne/:id')
         public getElectionById(@Param() params:any): any {
             const id = Number(params.id);
@@ -23,8 +33,11 @@ export class ElectionsController {
             } else {
                 return new HttpException('Id no valido',
                      HttpStatus.NOT_ACCEPTABLE);
-                
             }
+        }
+        @Get('getResults/:id')
+        public getElectionResults(@Param('id') id_user: number): any {
+            return this.electionsService.getElectionResults(id_user);
         }
 
         @Post('newElection')
@@ -49,12 +62,10 @@ export class ElectionsController {
                 return this.electionsService.updateElection(id, objUpdate);
             }else{
                 return new HttpException('Id no valido',409);
-    
             }
         }
     
         @Delete('delete/:id')
-
         public deleteElection(@Param() params: any): any {
             const id = Number(params.id);
             if (!isNaN(id)) {
@@ -63,4 +74,6 @@ export class ElectionsController {
                 return new HttpException('Id no valido', HttpStatus.NOT_ACCEPTABLE);
             }
         }
+
+        
 }

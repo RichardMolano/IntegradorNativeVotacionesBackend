@@ -25,9 +25,14 @@ export class UserService {
         return this.userRepositorio.save(newUser);
     }
 
-    updateUser(id: number, userData: User): Promise<User> {
-        userData.id = id; // Ensure the ID is set for the update
-        return this.userRepositorio.save({...userData });
+    async updateUser(id: number, userData: User): Promise<User> {
+        await this.userRepositorio.update(id, userData);
+        // Recupera el usuario actualizado
+        const updatedUser = await this.userRepositorio.findOne({ where: { id }, relations: ['roleUser'] });
+        if (!updatedUser) {
+            throw new Error(`User with id ${id} not found`);
+        }
+        return updatedUser;
     }
     deleteUser(id: number): Promise<any> {
         return this.userRepositorio.delete({ id });

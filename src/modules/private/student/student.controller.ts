@@ -12,6 +12,7 @@ export class StudentController {
         public getStudents(): any {
             return this.studentService.getStudents();
         }
+
     
         @Get('findOne/:id')
         public getStudentById(@Param() params:any): any {
@@ -29,6 +30,7 @@ export class StudentController {
         @Post('newStudent')
         public newStudent(@Req() request: any): any {
             const objStudent: Student = request.body as Student;
+            objStudent.id_faculty = request.body.faculty.id;
             return this.studentService.newStudent(objStudent);
         }
     

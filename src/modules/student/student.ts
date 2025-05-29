@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "../user/user";
 
 import { Faculty } from "../faculty/faculty";
@@ -21,16 +21,16 @@ export class Student {
     @JoinColumn({ name: 'id_user', referencedColumnName: 'id' })
     public userStudent: User;
 
-    @OneToOne(() => Faculty, (faculty) => faculty.studentFaculty)
+    @ManyToOne(() => Faculty, (faculty) => faculty.studentFaculty)
     @JoinColumn({ name: 'id_faculty', referencedColumnName: 'id' })
     public facultyStudent: Faculty;
 
-    @OneToOne(() => Candidates, (candidates) => candidates.userStudent)
-    public candidatesUser: Candidates;
+    @OneToMany(() => Candidates, (candidates) => candidates.userStudent)
+    public candidatesUser: Candidates[];
 
-    @OneToOne(() => Votes, (votes) => votes.userVotes)
-    public votesUser: Votes;
-    
+    @OneToMany(() => Votes, (votes) => votes.userVotes)
+    public votesUser: Votes[];
+
     constructor(id_user: number, id_faculty: number, semester: number) {
         this.id_user = id_user;
         this.id_faculty = id_faculty;

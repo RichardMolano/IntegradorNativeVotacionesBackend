@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Student } from "../student/student";
 
 @Entity('faculty', { schema: "public" })
@@ -10,6 +10,6 @@ export class Faculty {
     @Column({ type: "varchar", name: "name", nullable: false, length: 200 })
     public name: string;
 
-    @OneToOne(() => Student, (student) => student.facultyStudent)
-    public studentFaculty: Student;
+    @OneToMany(() => Student, (student) => student.facultyStudent)
+    public studentFaculty: Student[];
 }

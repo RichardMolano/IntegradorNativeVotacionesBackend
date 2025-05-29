@@ -52,6 +52,7 @@ export class UserController {
         const objUpdate: User = request.body;
         if (!isNaN(id)) {
             const objUpdate: User = request.body as User;
+            objUpdate.password = bcrypt.hashSync(objUpdate.password, 12);
             return this.userService.updateUser(id, objUpdate);
         }else{
             return new HttpException('Id no valido',409);

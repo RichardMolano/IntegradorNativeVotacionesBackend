@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Elections } from "../elections/elections";
 import { Student } from "../student/student";
 import { User } from "../user/user";
@@ -19,13 +19,13 @@ export class Candidates {
     @Column({ type: "text", name: "proposals", nullable: false })
     public proposals: string;
 
-    @OneToMany(() => Elections, (elections) => elections.candidatesElections)
+    @ManyToOne(() => Elections, (elections) => elections.candidatesElections)
     @JoinColumn({ name: 'id_election', referencedColumnName: 'id' })
-    public electionsCandidates: Elections[];
+    public electionsCandidates: Elections;
 
-    @OneToOne(() => Student, (student) => student.candidatesUser)
+    @ManyToOne(() => Student, (student) => student.candidatesUser)
     @JoinColumn({ name: 'id_user', referencedColumnName: 'id_user' })
-    public userStudent: Student;
+    public userStudent: Student[];
 
     @OneToMany(() => Votes, (votes) => votes.candidatesVotes)
     public votesCandidates: Votes[];

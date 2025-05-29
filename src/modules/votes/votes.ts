@@ -9,8 +9,8 @@ export class Votes {
     @PrimaryGeneratedColumn({ type: "integer", name: "id" })
     public id: number;
 
-    @Column({ type: "integer", name: "id_candidate", nullable: false })
-    public id_candidate: number;
+    @Column({ type: "integer", name: "id_candidate", nullable: true })
+    public id_candidate?: number;
 
     @Column({ type: "integer", name: "id_user", nullable: false })
     public id_user: number;
@@ -23,16 +23,16 @@ export class Votes {
 
     @Column({ type: "boolean", name: "state", nullable: false, default: () => "false" })
     public state: boolean;
-
-    @ManyToOne(() => Candidates, (candidates) => candidates.electionsCandidates)
+    
+    @ManyToOne(() => Candidates, (candidates) => candidates.electionsCandidates, { nullable: true })
     @JoinColumn({ name: 'id_candidate', referencedColumnName: 'id' })
-    public candidatesVotes: Candidates[];
+    public candidatesVotes?: Candidates | null;
 
-    @OneToOne(() => Student, (student) => student.votesUser)
+    @ManyToOne(() => Student, (student) => student.votesUser)
     @JoinColumn({ name: 'id_user', referencedColumnName: 'id_user' })
-    public userVotes: Student;
+    public userVotes: Student[];
 
-    @OneToOne(() => Elections, (elections) => elections.votesElections)
+    @ManyToOne(() => Elections, (elections) => elections.votesElections)
     @JoinColumn({ name: 'id_election', referencedColumnName: 'id' })
-    public electionsVotes: Elections;
+    public electionsVotes: Elections[];
 }
